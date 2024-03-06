@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+
+<h1> Travel Details </h1>
+<div class="card">
+    <div class="card-content">
+
+        <span class="card-title">{{ travel.name }}</span>
+        <p>Country: {{ travel.country }}</p>
+        <p>City: {{ travel.city }}</p>
+        <p>Description: {{ travel.description }}</p>
+
+    
+
+    </div>
+
+    <div class="card-action">
+        <a href="{% url 'travels_update' travel.id %}">Edit</a>
+        <a href="{% url 'travels_delete' travel.id %}">Delete</a>
+    </div>
+
+</div>
+
+<div>
+
+
+    <form action="{% url 'add_checking' travel.id %}" method="post">
+        {% csrf_token %}
+        {{ checking_form.as_p }}
+        <input type="submit" value="Add Checking" class="btn">
+    </form>
+
+    {% if travel.checking_visit %}
+    <div class="card-panel teal-text center-align"> You've been to {{ travel.name }}, checking to log a new visit. </div>
+    {% else %}
+    <div class="card-panel red-text center-align"> You've never been to {{ travel.name }}, checking to log a visit. </div>
+    {% endif %}
+
+    <table class="striped">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Visited On</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for checking in travel.checking_set.all %}
+            <tr>
+                <td>{{ checking.get_visit_display }}</td>
+                <td>{{ checking.date }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+</div>
+
+<!-- Assigned Status -->
+
+<hr>
+
+<a name="checklists">
+
+    <div class="row">
+        <div class="col s6">
+            <h4> Checklist </h4>
+
+            {% if travel.checklists.count %}
+
+            {% for checklist in travel.checklists.all %}
+
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">
+                    <span> {{ checklist.name }} </span>
+                    <i class="material-icons">done</i>
+                </span>
+                </div>
+
+                <div class="card-action">
+                    <form action="{% url 'unassoc_checklist' travel.id checklist.id %}#checklists" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn"> Remove</button>
+                    </form>
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+            {% else %}
+
+            <h5>Nothing done :(</h5>
+
+            {% endif%}
+
+        </div>
+
+<!-- Not Assigned Status -->
+
+        <div class="col s6">
+            <h4>{{ travel.name }}'s Planner</h4>
+
+            {% if checklists.count %}
+
+            {% for checklist in checklists.all %}
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">
+                    <span> {{ checklist.name }} </span>
+                    </span>
+                </div>
+
+
+                <div class="card-action">
+                    <form action="{% url 'assoc_checklist' travel.id checklist.id %}#checklists" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn"> Add</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+
+                {% else %}
+                    <h5> {{ travel.name }} is up to date <i class="material-icons">done_all</i></h5>
+                    <p><a href="{% url 'checklists_create' %}"> Add new Checklist to your planner </a></p>
+
+                {% endif %}
+        </div>
+
+    </div>
+
+</a>
+
+<script>
+
+    var dateElement = document.getElementById('id_date');
+    M.Datepicker.init(dateElement, {
+        format: 'yyyy-mm-dd',
+        defaultDate: new Date(),
+        setDefaultDate: true,
+        autoClose: true
+    });
+
+    var visitElement = document.getElementById('id_visit');
+    M.FormSelect.init(visitElement);
+
+</script>
+
+{% endblock %}

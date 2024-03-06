@@ -1,0 +1,43 @@
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+h1, .brand-logo {
+    font-family: 'Style Script', cursive;
+
+}
+
+nav .nav-wrapper {
+    background: linear-gradient(90deg, #49bd13 0%, #039be5 100%);
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+footer.page-footer {
+    padding-top: 0;
+    text-align: right;
+    background: linear-gradient(90deg, #49bd13 0%, #039be5 100%);
+}
+
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+#homepage {
+    text-align: center;
+}
+
+a {
+    color: #26a69a;
+}
+
+@media only screen and (max-width: 600px) {
+#home-img {
+    max-width: 100%;
+  }
+}

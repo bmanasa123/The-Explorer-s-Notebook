@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if object %}
+<h1>Edit <span class="teal-text">{{ object.name }}</span></h1>
+{% else %}
+<h1>Create Checklist option</h1>
+<p>You can create any options, e.g.: Hotel research, book flights, plan itinerary, etc. It will be shown as an option on your travel planner.</p>
+{% endif %}
+
+<form action="" method="post">
+
+    {% csrf_token %}
+
+    <table>
+        {{form.as_table}}
+    </table>
+    <input type="submit" value="Submit" class="btn">
+
+</form>
+
+{% endblock %}
